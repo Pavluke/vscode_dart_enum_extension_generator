@@ -69,14 +69,14 @@ export default class DartEnum implements IDartEnum {
    */
   public toWhenMethod(): string {
     const args = this.values
-      .map((e) => `required T Function() ${e},`)
+      .map((e) => `required R Function() ${e},`)
       .join('\n    ')
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}(),`)
       .join('\n        ')
 
     return `
-  T when<T extends Object>({
+  R when<R extends Object>({
     ${args}
   }) =>
       switch (this) {
@@ -90,16 +90,16 @@ export default class DartEnum implements IDartEnum {
    */
   public toMaybeWhenMethod(): string {
     const args = this.values
-      .map((e) => `T Function()? ${e},`)
+      .map((e) => `R Function()? ${e},`)
       .join('\n    ')
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call() ?? orElse(),`)
       .join('\n        ')
 
     return `
-  T maybeWhen<T extends Object>({
+  R maybeWhen<R extends Object>({
     ${args}
-    required T Function() orElse,
+    required R Function() orElse,
   }) =>
       switch (this) {
         ${cases}
@@ -111,14 +111,14 @@ export default class DartEnum implements IDartEnum {
      */
   public toWhenOrNullMethod(): string {
     const args = this.values
-      .map((e) => `T? Function()? ${e},`)
+      .map((e) => `R? Function()? ${e},`)
       .join('\n    ')
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call(),`)
       .join('\n        ')
 
     return `
-  T? whenOrNull<T extends Object?>({
+  R? whenOrNull<R extends Object?>({
     ${args}
   }) =>
       switch (this) {
@@ -180,7 +180,7 @@ export default class DartEnum implements IDartEnum {
       .join('\n        ')
 
     return `
-  static Map<String, T> toMapWithValues<T extends Object>({
+  static Map<String, T> toMapWithValues<T extends Object?>({
     ${args}
   }) =>
       {

@@ -1,11 +1,11 @@
 {
   "name": "dart-enum-extensions-generator",
   "displayName": "Dart Enum Extensions Generator",
-  "description": "A Visual Studio Code extension designed to boost productivity when working with Dart enums. It automatically generates useful extension methods like `when`, `maybeWhen`, `whenOrNull`, `map`, `maybeMap` and `toMapWithValues`, as well as `is` getters for enum values. Perfect for simplifying repetitive code and improving code readability in Dart projects.",
+  "description": "A VS Code extension that generates useful Dart enum extension methods like `when`, `maybeWhen`, and `whenOrNull`, simplifying repetitive code and improving readability.",
   "repository": "https://github.com/Pavluke/vscode_dart_enum_extensions_generator",
   "publisher": "Pavluke",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.97.0"
   },

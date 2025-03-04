@@ -9,8 +9,6 @@ Generate the following extension methods for Enum.
 - `when`
 - `maybeWhen`
 - `whenOrNull`
-- `map`
-- `maybeMap`
 
 Generate the following extension static methods for Enum.
 
