@@ -25,8 +25,8 @@ export class EnumCodeActionsProvider implements vscode.CodeActionProvider {
       this.generateWhenOrNullAction(document, range),
       //this.generateMapAction(document, range),
       //this.generateMaybeMapAction(document, range),
-      //this.generateMapWithValuesAction(document, range),
       this.generateGettersAction(document, range),
+      this.generateMapWithValuesAction(document, range),
     ].filter((action): action is vscode.CodeAction => action !== null)
 
     return actions
