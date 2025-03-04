@@ -111,14 +111,14 @@ export default class DartEnum implements IDartEnum {
      */
   public toWhenOrNullMethod(): string {
     const args = this.values
-      .map((e) => `T Function()? ${e},`)
+      .map((e) => `T? Function()? ${e},`)
       .join('\n    ')
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call(),`)
       .join('\n        ')
 
     return `
-  T? whenOrNull<T>({
+  T? whenOrNull<T extends Object?>({
     ${args}
   }) =>
       switch (this) {
