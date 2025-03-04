@@ -2,7 +2,7 @@
 
 An extension for VS Code to generate useful enum extension methods.
 
-![demo](https://github.com/Pavluke/vscode_dart_enum_extensions_generator/assets/gifs/demo.gif)
+![demo](https://github.com/Pavluke/vscode_dart_enum_extensions_generator/blob/main/assets/gifs/demo.gif?raw=true)
 
 # Features
 
