@@ -173,14 +173,14 @@ export default class DartEnum implements IDartEnum {
    */
   public toMapWithValuesMethod(): string {
     const args = this.values
-      .map((e) => `required T ${e},`)
+      .map((e) => `required T? ${e},`)
       .join('\n    ')
     const entries = this.values
       .map((e) => `'${e}': ${e},`)
       .join('\n        ')
 
     return `
-  static Map<String, T> toMapWithValues<T extends Object?>({
+  static Map<String, T?> toMapWithValues<T extends Object?>({
     ${args}
   }) =>
       {
