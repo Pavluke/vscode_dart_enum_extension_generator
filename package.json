@@ -5,7 +5,8 @@
   "repository": "https://github.com/Pavluke/vscode_dart_enum_extensions_generator",
   "publisher": "Pavluke",
   "license": "MIT",
-  "version": "0.0.3",
+  "version": "0.0.4",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.97.0"
   },
