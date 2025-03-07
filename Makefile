@@ -4,3 +4,7 @@ build:
 
 publish:
 	vsce publish
+
+install_deps:
+	npm install -g vsce
+	vsce --version 
