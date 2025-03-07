@@ -6,11 +6,12 @@ import { capitalize } from '../utils'
  * A class representing a Dart enum and providing methods for generating code.
  */
 export default class DartEnum extends IDartEnum {
-
-
   constructor(name: string, values: string[], range: Range) {
     super(name, values, range)
   }
+
+  private switchItemSpace: string = '\n    ';
+  private paramItemSpace: string = '\n    ';
 
   /**
    * Parses a string and creates a DartEnum object.
@@ -60,12 +61,11 @@ export default class DartEnum extends IDartEnum {
   }
 
   /**
-     * Generates the extension.
-     * @returns A string containing the extension code.
-     */
+   * Generates the extension.
+   * @returns A string containing the extension code.
+   */
   public createExtension(): string {
-    return `
-  ${this.toGetterMethods()}
+    return `${this.toGetterMethods()}
 
   ${this.toWhenMethod()}
 
@@ -75,143 +75,138 @@ export default class DartEnum extends IDartEnum {
 
   ${this.toMapMethod()}
 
-  ${this.toMaybeMapMethod()}
-    `
+  ${this.toMaybeMapMethod()}`
   }
 
   /**
-   * Generates the `when` method.
+   * Generates the `when` method with documentation.
    * @returns A string containing the method code.
    */
   private toWhenMethod(): string {
     const args = this.values
       .map((e) => `required R Function() ${e},`)
-      .join('\n    ')
+      .join(this.paramItemSpace)
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}(),`)
-      .join('\n        ')
+      .join(this.switchItemSpace)
 
     return `
+  /// Executes a function based on the enum value.
+  ///
+  /// [R] is the return type of the functions.
+  /// Each function corresponds to an enum value.
   R when<R extends Object>({
     ${args}
-  }) =>
-      switch (this) {
-        ${cases}
-      };`.trim()
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
   }
 
   /**
-   * Generates the `maybeWhen` method.
+   * Generates the `maybeWhen` method with documentation.
    * @returns A string containing the method code.
    */
   private toMaybeWhenMethod(): string {
     const args = this.values
       .map((e) => `R Function()? ${e},`)
-      .join('\n    ')
+      .join(this.paramItemSpace)
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call() ?? orElse(),`)
-      .join('\n        ')
+      .join(this.switchItemSpace)
 
     return `
+  /// Executes a function based on the enum value, with a fallback.
+  ///
+  /// [R] is the return type of the functions.
+  /// Each function corresponds to an enum value and can be null.
+  /// [orElse] is called if the corresponding function is null.
   R maybeWhen<R extends Object>({
     ${args}
     required R Function() orElse,
-  }) =>
-      switch (this) {
-        ${cases}
-      };`.trim()
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
   }
 
   /**
-     * Generates the `whenOrNull` method.
-     */
+   * Generates the `whenOrNull` method with documentation.
+   * @returns A string containing the method code.
+   */
   private toWhenOrNullMethod(): string {
     const args = this.values
       .map((e) => `R? Function()? ${e},`)
-      .join('\n    ')
+      .join(this.paramItemSpace)
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call(),`)
-      .join('\n        ')
+      .join(this.switchItemSpace)
 
     return `
+  /// Executes a function based on the enum value, returning null if no function is provided.
+  ///
+  /// [R] is the return type of the functions.
+  /// Each function corresponds to an enum value and can be null.
   R? whenOrNull<R extends Object?>({
     ${args}
-  }) =>
-      switch (this) {
-        ${cases}
-      };`.trim()
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
   }
 
   /**
-   * Generates the `map` method.
+   * Generates the `map` method with documentation.
    * @returns A string containing the method code.
    */
   private toMapMethod(): string {
     const args = this.values
       .map((e) => `required void Function() ${e},`)
-      .join('\n    ')
+      .join(this.paramItemSpace)
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}(),`)
-      .join('\n        ')
+      .join(this.switchItemSpace)
 
     return `
+  /// Executes a void function based on the enum value.
+  ///
+  /// Each function corresponds to an enum value.
   void map({
     ${args}
-  }) =>
-      switch (this) {
-        ${cases}
-      };`.trim()
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
   }
 
   /**
-   * Generates the `maybeMap` method.
+   * Generates the `maybeMap` method with documentation.
+   * @returns A string containing the method code.
    */
   private toMaybeMapMethod(): string {
     const args = this.values
       .map((e) => `void Function()? ${e},`)
-      .join('\n    ')
+      .join(this.paramItemSpace)
     const cases = this.values
       .map((e) => `${this.name}.${e} => ${e}?.call(),`)
-      .join('\n        ')
+      .join(this.switchItemSpace)
 
     return `
+  /// Executes a void function based on the enum value, with optional functions.
+  ///
+  /// Each function corresponds to an enum value and can be null.
   void maybeMap({
     ${args}
-  }) =>
-      switch (this) {
-        ${cases}
-      };`.trim()
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
   }
 
   /**
-   * Generates the `toMapWithValues` method.
-   * @returns A string containing the method code.
-   */
-  private toMapWithValuesMethod(): string {
-    const args = this.values
-      .map((e) => `required T? ${e},`)
-      .join('\n    ')
-    const entries = this.values
-      .map((e) => `'${e}': ${e},`)
-      .join('\n        ')
-
-    return `
-  static Map<String, T?> toMapWithValues<T extends Object?>({
-    ${args}
-  }) =>
-      {
-        ${entries}
-      };`.trim()
-  }
-
-  /**
-   * Generates getters for enum values.
+   * Generates getters for enum values with documentation.
    * @returns A string containing the getters code.
    */
   private toGetterMethods(): string {
     return this.values
-      .map((e) => `bool get is${capitalize(e)} => this == ${this.name}.${e};`)
-      .join('\n  ')
+      .map((e) => `
+  /// Returns \`true\` if the enum value is [${this.name}.${e}].
+  bool get is${capitalize(e)} => this == ${this.name}.${e};`.trim())
+      .join('\n\n  ')
   }
-
 }

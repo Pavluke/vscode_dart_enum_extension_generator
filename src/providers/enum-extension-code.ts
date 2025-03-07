@@ -51,9 +51,17 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
 
     let rawInput = cursorLine.text
     let line = range.start.line
-    while (!rawInput.includes('}')) {
+    let braceCount = 0
+
+    while (line < document.lineCount) {
+      const lineText = document.lineAt(line).text
+      rawInput += lineText
+      braceCount += (lineText.match(/{/g) || []).length
+      braceCount -= (lineText.match(/}/g) || []).length
+      if (braceCount === 0) {
+        break
+      }
       line++
-      rawInput += document.lineAt(line).text
     }
 
     const dartEnum = DartEnum.fromString(rawInput)
@@ -62,17 +70,20 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
       return null
     }
 
-    const extensionName = `${dartEnum.name}Extension`
+    const extensionName = `${dartEnum.name}ExtensionGenerated`
     const exists = this.extensionExists(document, extensionName, line)
     const actionTitle = exists
-      ? `enum: Regenerate extension`
-      : `enum: Generate extension`
+      ? `Regenerate enum extension`
+      : `Generate enum extension`
 
     const fix = new vscode.CodeAction(actionTitle, kind)
     fix.edit = new vscode.WorkspaceEdit()
 
     let codeToInsert = ''
-    codeToInsert = `\nextension ${extensionName} on ${dartEnum.name} {\n  ${extensionGenerator(dartEnum)}\n}`
+    codeToInsert = `\nextension ${extensionName} on ${dartEnum.name} {
+  ${extensionGenerator(dartEnum)}
+}
+`
     if (exists) {
       const range = this.findExtensionRange(document, extensionName, line)
       if (range) {
@@ -87,11 +98,12 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
     return fix
   }
 
+
   /**
    * Checks if an extension or class exists in the document.
    */
   private extensionExists(document: vscode.TextDocument, name: string, startLine: number): boolean {
-    const pattern = new RegExp(`(extension)\\s+${name}`)
+    const pattern = new RegExp(`extension\\s+${name}\\s+on`)
     for (let i = startLine; i < document.lineCount; i++) {
       const lineText = document.lineAt(i).text
       if (pattern.test(lineText)) {
@@ -105,7 +117,7 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
    * Finds the range of an extension or class in the document.
    */
   private findExtensionRange(document: vscode.TextDocument, name: string, startLine: number): vscode.Range | null {
-    const pattern = new RegExp(`(extension)\\s+${name}`)
+    const pattern = new RegExp(`extension\\s+${name}\\s+on`)
     for (let i = startLine; i < document.lineCount; i++) {
       const lineText = document.lineAt(i).text
       if (pattern.test(lineText)) {
