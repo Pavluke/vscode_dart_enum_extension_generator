@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { EnumCodeActionsProvider } from './providers'
+import { EnumExtensionCodeProvider } from './providers'
 
 export function activate(context: vscode.ExtensionContext) {
   const actions = vscode.languages.registerCodeActionsProvider(
@@ -7,10 +7,10 @@ export function activate(context: vscode.ExtensionContext) {
       language: 'dart',
       scheme: 'file',
     },
-    new EnumCodeActionsProvider(),
+    new EnumExtensionCodeProvider(),
     {
       providedCodeActionKinds:
-        EnumCodeActionsProvider.providedCodeActionKinds,
+        EnumExtensionCodeProvider.providedCodeActionKinds,
     }
   )
 

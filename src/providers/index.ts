@@ -1,1 +1,1 @@
-export { EnumCodeActionsProvider } from './enum-code-actions'
+export { EnumExtensionCodeProvider } from './enum-extension-code'

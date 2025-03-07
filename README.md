@@ -6,14 +6,11 @@ An extension for VS Code to generate useful enum extension methods.
 
 # Features
 
-Generate the following extension methods for Enum.
+Generate the following extension for Enum.
 
+- `is` getters
+- `map`
+- `maybeMap`
 - `when`
 - `maybeWhen`
 - `whenOrNull`
-
-Generate the following extension static methods for Enum.
-
-- `toMapWithValues`
-
-And `is` getters.

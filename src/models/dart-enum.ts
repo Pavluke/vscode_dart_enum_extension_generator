@@ -1,19 +1,15 @@
 import { Position, Range } from 'vscode'
-import { IDartEnum } from '../interfaces'
-import { capitalize } from '../utils/string.utils'
+import { IDartEnum } from '../interfaces/dart-enum.interface'
+import { capitalize } from '../utils'
 
 /**
  * A class representing a Dart enum and providing methods for generating code.
  */
-export default class DartEnum implements IDartEnum {
-  name: string
-  values: string[]
-  range: Range
+export default class DartEnum extends IDartEnum {
+
 
   constructor(name: string, values: string[], range: Range) {
-    this.name = name
-    this.values = values
-    this.range = range
+    super(name, values, range)
   }
 
   /**
@@ -64,10 +60,30 @@ export default class DartEnum implements IDartEnum {
   }
 
   /**
+     * Generates the extension.
+     * @returns A string containing the extension code.
+     */
+  public createExtension(): string {
+    return `
+  ${this.toGetterMethods()}
+
+  ${this.toWhenMethod()}
+
+  ${this.toMaybeWhenMethod()}
+
+  ${this.toWhenOrNullMethod()}
+
+  ${this.toMapMethod()}
+
+  ${this.toMaybeMapMethod()}
+    `
+  }
+
+  /**
    * Generates the `when` method.
    * @returns A string containing the method code.
    */
-  public toWhenMethod(): string {
+  private toWhenMethod(): string {
     const args = this.values
       .map((e) => `required R Function() ${e},`)
       .join('\n    ')
@@ -88,7 +104,7 @@ export default class DartEnum implements IDartEnum {
    * Generates the `maybeWhen` method.
    * @returns A string containing the method code.
    */
-  public toMaybeWhenMethod(): string {
+  private toMaybeWhenMethod(): string {
     const args = this.values
       .map((e) => `R Function()? ${e},`)
       .join('\n    ')
@@ -109,7 +125,7 @@ export default class DartEnum implements IDartEnum {
   /**
      * Generates the `whenOrNull` method.
      */
-  public toWhenOrNullMethod(): string {
+  private toWhenOrNullMethod(): string {
     const args = this.values
       .map((e) => `R? Function()? ${e},`)
       .join('\n    ')
@@ -130,7 +146,7 @@ export default class DartEnum implements IDartEnum {
    * Generates the `map` method.
    * @returns A string containing the method code.
    */
-  public toMapMethod(): string {
+  private toMapMethod(): string {
     const args = this.values
       .map((e) => `required void Function() ${e},`)
       .join('\n    ')
@@ -150,7 +166,7 @@ export default class DartEnum implements IDartEnum {
   /**
    * Generates the `maybeMap` method.
    */
-  public toMaybeMapMethod(): string {
+  private toMaybeMapMethod(): string {
     const args = this.values
       .map((e) => `void Function()? ${e},`)
       .join('\n    ')
@@ -171,7 +187,7 @@ export default class DartEnum implements IDartEnum {
    * Generates the `toMapWithValues` method.
    * @returns A string containing the method code.
    */
-  public toMapWithValuesMethod(): string {
+  private toMapWithValuesMethod(): string {
     const args = this.values
       .map((e) => `required T? ${e},`)
       .join('\n    ')
@@ -192,7 +208,7 @@ export default class DartEnum implements IDartEnum {
    * Generates getters for enum values.
    * @returns A string containing the getters code.
    */
-  public toGetterMethods(): string {
+  private toGetterMethods(): string {
     return this.values
       .map((e) => `bool get is${capitalize(e)} => this == ${this.name}.${e};`)
       .join('\n  ')

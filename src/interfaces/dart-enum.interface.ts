@@ -3,18 +3,19 @@ import { Range } from 'vscode'
 /**
  * Interface representing a Dart enum.
  */
-export interface IDartEnum {
+export abstract class IDartEnum {
 	name: string
 	values: string[]
 	range: Range
 
-	toWhenMethod(): string
-	toMaybeWhenMethod(): string
-	toWhenOrNullMethod(): string
-	toMapMethod(): string
-	toMaybeMapMethod(): string
-	toMapWithValuesMethod(): string
-	toGetterMethods(): string
+	constructor(name: string, values: string[], range: Range) {
+		this.name = name
+		this.values = values
+		this.range = range
+	}
+
+	abstract createExtension(): string
+
 }
 
 /**
