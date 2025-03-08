@@ -75,11 +75,7 @@ export default class DartEnum extends IDartEnum {
 
   ${this.toMaybeWhenMethod()}
 
-  ${this.toWhenOrNullMethod()}
-
-  ${this.toMapMethod()}
-
-  ${this.toMaybeMapMethod()}`
+  ${this.toWhenOrNullMethod()}`
   }
 
   /**
@@ -99,7 +95,7 @@ export default class DartEnum extends IDartEnum {
   ///
   /// [R] is the return type of the functions.
   /// Each function corresponds to an enum value.
-  R when<R extends Object>({
+  R when<R>({
     ${args}
   }) => switch (this) {
     ${cases}
@@ -124,7 +120,7 @@ export default class DartEnum extends IDartEnum {
   /// [R] is the return type of the functions.
   /// Each function corresponds to an enum value and can be null.
   /// [orElse] is called if the corresponding function is null.
-  R maybeWhen<R extends Object>({
+  R maybeWhen<R>({
     ${args}
     required R Function() orElse,
   }) => switch (this) {
@@ -149,7 +145,7 @@ export default class DartEnum extends IDartEnum {
   ///
   /// [R] is the return type of the functions.
   /// Each function corresponds to an enum value and can be null.
-  R? whenOrNull<R extends Object?>({
+  R? whenOrNull<R>({
     ${args}
   }) => switch (this) {
     ${cases}
@@ -188,7 +184,7 @@ export default class DartEnum extends IDartEnum {
       .map((e) => `void Function()? ${e},`)
       .join(this.paramItemSpace)
     const cases = this.values
-      .map((e) => `${this.name}.${e} => ${e}?.call(),`)
+      .map((e) => `${this.name}.${e} => ${e}?.call() ?? orElse(),`)
       .join(this.switchItemSpace)
 
     return `
@@ -196,6 +192,30 @@ export default class DartEnum extends IDartEnum {
   ///
   /// Each function corresponds to an enum value and can be null.
   void maybeMap({
+    ${args}
+    required R Function() orElse,
+  }) => switch (this) {
+    ${cases}
+  };`.trim()
+  }
+
+  /**
+   * Generates the `maybeMap` method with documentation.
+   * @returns A string containing the method code.
+   */
+  private toMapOrNullMethod(): string {
+    const args = this.values
+      .map((e) => `void Function()? ${e},`)
+      .join(this.paramItemSpace)
+    const cases = this.values
+      .map((e) => `${this.name}.${e} => ${e}?.call(),`)
+      .join(this.switchItemSpace)
+
+    return `
+  /// Executes a void function based on the enum value, with optional functions.
+  ///
+  /// Each function corresponds to an enum value and can be null.
+  void mapOrNull({
     ${args}
   }) => switch (this) {
     ${cases}
