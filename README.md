@@ -18,6 +18,6 @@ Effortlessly generate the following extension methods for your Dart enums:
 ## GIFs
 
 <div style="display: flex;">
-  <img src="https://github.com/Pavluke/vscode_dart_enum_extensions_generator/blob/main/assets/gifs/generate.gif?raw=true" alt="generate" style="width: 49%; margin-right: 1%;">
-  <img src="https://github.com/Pavluke/vscode_dart_enum_extensions_generator/blob/main/assets/gifs/regenerate.gif?raw=true" alt="regenerate" style="width: 49%;">
+  <img src="https://github.com/Pavluke/vscode_dart_enum_extension_generator/blob/main/assets/gifs/generate.gif?raw=true" alt="generate" style="width: 49%; margin-right: 1%;">
+  <img src="https://github.com/Pavluke/vscode_dart_enum_extension_generator/blob/main/assets/gifs/regenerate.gif?raw=true" alt="regenerate" style="width: 49%;">
 </div>

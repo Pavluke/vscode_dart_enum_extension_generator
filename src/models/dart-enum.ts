@@ -18,9 +18,10 @@ export default class DartEnum extends IDartEnum {
    * @param input - The string containing the enum definition.
    * @returns A DartEnum object or `null` if the enum is not found.
    */
-  static fromString(input: String): DartEnum | null {
+  static fromString(input: string): DartEnum | null {
     try {
-      const enumPattern = /(?<=(enum\s))([A-Z][a-zA-Z0-9{,\s\S]*?})/
+
+      const enumPattern = /enum\s+([A-Z][a-zA-Z0-9]*)\s*\{([\s\S]*?)\}/
       const match = input.match(enumPattern)
 
       if (!match) {
@@ -28,18 +29,17 @@ export default class DartEnum extends IDartEnum {
         return null
       }
 
-      const rawEnum = match[0]
-      const elements = rawEnum.split(/[{}]/)
+      const name = match[1].trim()
+      const valuesPart = match[2].trim()
 
-      if (elements.length !== 3) {
-        console.error("Invalid enum format.")
+      const values = this.extractValues(valuesPart)
+      console.info("values:", values)
+      if (values.length === 0) {
+        console.error("No valid enum values found.")
         return null
       }
 
-      const name = elements[0]
-      const values = this.extractValues(elements[1])
-
-      return new DartEnum(name.trim(), values, new Range(new Position(0, 0), new Position(0, 0)))
+      return new DartEnum(name, values, new Range(new Position(0, 0), new Position(0, 0)))
     } catch (error) {
       console.error("Error parsing enum:", error)
       return null
@@ -52,12 +52,17 @@ export default class DartEnum extends IDartEnum {
    * @returns An array of values.
    */
   private static extractValues(input: string): string[] {
-    const valuesPart = input.split(';')[0]
-    return valuesPart
-      .replace(/\([^)]*\)/g, '')
-      .split(',')
-      .map((e) => e.trim())
-      .filter((e) => e !== '')
+    // Удаляем все пробелы и обрезаем строку
+    var valuesPart = input.replace(/ /g, '').trim()
+    valuesPart = valuesPart.replace(/\([^)]*\)/g, '')
+    valuesPart = valuesPart.split('{')[1]
+    let values
+    if (valuesPart.includes(';')) {
+      values = valuesPart.split(';')[0].split(',')
+    } else {
+      values = valuesPart.split('}')[0].split(',')
+    }
+    return values.map(value => value.trim()).filter(value => value !== '')
   }
 
   /**
