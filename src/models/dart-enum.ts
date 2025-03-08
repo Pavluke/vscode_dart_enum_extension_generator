@@ -33,7 +33,6 @@ export default class DartEnum extends IDartEnum {
       const valuesPart = match[2].trim()
 
       const values = this.extractValues(valuesPart)
-      console.info("values:", values)
       if (values.length === 0) {
         console.error("No valid enum values found.")
         return null
