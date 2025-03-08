@@ -1,4 +1,4 @@
-# Dart Enum Extensions Generator
+# Dart Enum Extension Generator
 
 An extension for Visual Studio Code that automatically generates useful
 extension methods for Dart enums, enhancing productivity and code consistency.
