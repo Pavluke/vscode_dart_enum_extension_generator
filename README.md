@@ -3,7 +3,7 @@
 An extension for Visual Studio Code that automatically generates useful
 extension methods for Dart enums, enhancing productivity and code consistency.
 
-![gen](https://github.com/Pavluke/vscode_dart_enum_extensions_generator/blob/main/assets/gifs/gen.gif?raw=true)
+![gen](https://github.com/Pavluke/vscode_dart_enum_extension_generator/blob/main/assets/gifs/gen.gif?raw=true)
 
 ## Features
 
