@@ -51,11 +51,12 @@ export default class DartEnum extends IDartEnum {
    * @returns An array of values.
    */
   private static extractValues(input: string): string[] {
-    // Удаляем все пробелы и обрезаем строку
     var valuesPart = input.replace(/ /g, '').trim()
     valuesPart = valuesPart.replace(/\([^)]*\)/g, '')
-    valuesPart = valuesPart.split('{')[1]
     let values
+    if (valuesPart.includes('{')) {
+      valuesPart = valuesPart.split('{')[1]
+    }
     if (valuesPart.includes(';')) {
       values = valuesPart.split(';')[0].split(',')
     } else {
