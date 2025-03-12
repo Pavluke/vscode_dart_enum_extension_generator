@@ -69,7 +69,7 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
       return null
     }
 
-    const extensionName = `${dartEnum.name}ExtensionG`
+    const extensionName = `${dartEnum.name}X`
     const exists = this.extensionExists(document, extensionName, line)
     const actionTitle = exists
       ? `Regenerate enum extension`
