@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.9]
+
+- refactor: raised the required argument "orElse" to the top.
+
 ## [1.0.8]
 
 - fix parsing is performed incorrectly when enum values have documentation.

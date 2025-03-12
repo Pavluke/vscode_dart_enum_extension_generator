@@ -135,8 +135,8 @@ export default class DartEnum extends IDartEnum {
   /// Each function corresponds to an enum value and can be null.
   /// [orElse] is called if the corresponding function is null.
   R maybeWhen<R>({
-    ${args}
     required R Function() orElse,
+    ${args}
   }) => switch (this) {
     ${cases}
   };`.trim()
