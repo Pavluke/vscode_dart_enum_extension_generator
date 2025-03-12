@@ -20,7 +20,6 @@ export default class DartEnum extends IDartEnum {
    */
   static fromString(input: string): DartEnum | null {
     try {
-
       const enumPattern = /enum\s+([A-Z][a-zA-Z0-9]*)\s*\{([\s\S]*?)\}/
       const match = input.match(enumPattern)
 
@@ -51,17 +50,31 @@ export default class DartEnum extends IDartEnum {
    * @returns An array of values.
    */
   private static extractValues(input: string): string[] {
+
+    // Remove all spaces and trim the input string
     var valuesPart = input.replace(/ /g, '').trim()
+
+    // Remove everything inside parentheses, which might be constructor parameters
     valuesPart = valuesPart.replace(/\([^)]*\)/g, '')
+
+    // Remove comments that start with ///, which are typically used for documentation
+    valuesPart = valuesPart.replace(/\/\/.*?(\r?\n|$)/g, '')
+
     let values
     if (valuesPart.includes('{')) {
+
+      // Extract the part inside the curly braces {}
       valuesPart = valuesPart.split('{')[1]
     }
     if (valuesPart.includes(';')) {
       values = valuesPart.split(';')[0].split(',')
     } else {
+
+      // Get the content inside the curly braces
       values = valuesPart.split('}')[0].split(',')
     }
+
+    // Split the values by comma and trim each value
     return values.map(value => value.trim()).filter(value => value !== '')
   }
 

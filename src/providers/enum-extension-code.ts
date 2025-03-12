@@ -55,7 +55,7 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
 
     while (line < document.lineCount) {
       const lineText = document.lineAt(line).text
-      rawInput += lineText
+      rawInput += '\n' + lineText
       braceCount += (lineText.match(/{/g) || []).length
       braceCount -= (lineText.match(/}/g) || []).length
       if (braceCount === 0) {
@@ -63,7 +63,6 @@ export class EnumExtensionCodeProvider implements vscode.CodeActionProvider {
       }
       line++
     }
-
     const dartEnum = DartEnum.fromString(rawInput)
 
     if (!dartEnum) {
